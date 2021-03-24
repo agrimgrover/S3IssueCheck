@@ -1,0 +1,18 @@
+version: "3.7"
+
+services:
+  agrimperftest:
+    image: pivotalrabbitmq/perf-test:latest
+    command: "--uri 'amqp://bep-test:bep-test@ucs-1016ga-wfaw-10037-rabbitmq-lb1.workfusion.com/bep' --queue-pattern 'agr-test-perf-%d'
+                                               --queue-pattern-from 1 --queue-pattern-to 20
+                                               --producers 200 --consumers 100 --rate 100"
+
+
+   # networks:
+    #  - rmq
+
+#networks:
+ # rmq:
+  #  external: true
+
+#     pivotalrabbitmq/perf-test:latest --uri amqp://rabbitmq

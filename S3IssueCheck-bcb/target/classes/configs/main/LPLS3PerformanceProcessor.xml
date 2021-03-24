@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns="http://web-harvest.sourceforge.net/schema/1.0/config" scriptlang="groovy">
+
+
+    <script><![CDATA[
+        import com.lpl.issue.app.AppExample
+        import com.lpl.issue.processor.LPLS3PerformanceProcessor
+
+        // Expecting only '_sys_transaction_id' from previous step.
+        String transactionId = _sys_transaction_id.toString();
+        def app = AppExample.init(binding).get();
+
+        // version 1.014
+
+        def processedTransaction = app.processTransaction(LPLS3PerformanceProcessor.class, transactionId);
+        ]]></script>
+
+    <!-- Nothing additional required to export. All data was saved inside Transaction. -->
+    <export include-original-data="true">
+    </export>
+</config>

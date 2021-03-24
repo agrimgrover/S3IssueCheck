@@ -1,0 +1,100 @@
+version: "3.7"
+
+services:
+  mssql:
+    container_name: mssql_standard_2019
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    ports:
+      - 1433:1433
+    user: root
+    depends_on:
+      - nexus
+    environment:
+      ACCEPT_EULA: Y
+      MSSQL_SA_PASSWORD: jEn125us!
+      MSSQL_PID: Standard
+      SA_PASSWORD: jEn125us!
+    healthcheck:
+      test: [ "CMD", "/opt/mssql-tools/bin/sqlcmd", "-U", "sa", "-P", "jEn125us!", "-Q", "select 1" ]
+      interval: 10s
+      retries: 10
+    volumes:
+      - /home/agrimgrover/docker/mysql:/var/opt/mssql
+
+  nexus:
+    container_name: nexus2
+    image: sonatype/nexus
+    ports:
+      - 8081:8081
+#   volumes:
+#     - /home/agrimgrover/docker/nexus/work:/sonatype-work
+
+
+  teamcity-server:
+    container_name: teamcity-server-instance
+    image: jetbrains/teamcity-server
+    ports:
+      - 8111:8111
+    depends_on:
+      - mssql
+    volumes:
+      - /home/agrimgrover/docker/teamcity/data:/data/teamcity_server/datadir
+      - /home/agrimgrover/docker/teamcity/logs:/opt/teamcity/logs
+
+  teamcity-agent-0:
+    container_name: teamcity-agent-instance-0
+    image: jetbrains/teamcity-agent
+    depends_on:
+      - teamcity-server
+    volumes:
+      - /home/agrimgrover/docker/teamcity/agent0:/data/teamcity_agent/conf
+    environment:
+      SERVER_URL: docker.gcs.net.in:8111
+
+  teamcity-agent-1:
+    container_name: teamcity-agent-instance-1
+    image: jetbrains/teamcity-agent
+    depends_on: [teamcity-agent-0]
+    volumes:
+      - /home/agrimgrover/docker/teamcity/agent1:/data/teamcity_agent/conf
+    environment:
+      SERVER_URL: docker.gcs.net.in:8111
+
+  teamcity-agent-2:
+    container_name: teamcity-agent-instance-2
+    image: jetbrains/teamcity-agent
+    depends_on: [teamcity-agent-1]
+    volumes:
+      - /home/agrimgrover/docker/teamcity/agent2:/data/teamcity_agent/conf
+    environment:
+      SERVER_URL: docker.gcs.net.in:8111
+
+  octopus-server:
+    container_name: octopus_server
+    image: octopusdeploy/octopusdeploy:latest
+    privileged: false
+    user: root
+    environment:
+      ACCEPT_EULA: Y
+      OCTOPUS_SERVER_NODE_NAME:
+      DB_CONNECTION_STRING: Server=docker.gcs.net.in,1433;Database=OctopusDeploy;User=sa;Password=jEn125us!
+      ADMIN_USERNAME: admin
+      ADMIN_PASSWORD: admin123
+      ADMIN_EMAIL: admin@admin.com
+      OCTOPUS_SERVER_BASE64_LICENSE: 46953-91015-06427-08255
+      MASTER_KEY:
+      ADMIN_API_KEY:
+      DISABLE_DIND: Y
+    ports:
+      - 8080:8080
+      - 10943:10943
+    volumes:
+      - /Users/agrimgrover/Documents/docker/octopus/repository:/repository
+      - /Users/agrimgrover/Documents/docker/octopus/artifacts:/artifacts
+      - /Users/agrimgrover/Documents/docker/octopus/taskLogs:/taskLogs
+      - /Users/agrimgrover/Documents/docker/octopus/cache:/cache
+      - /Users/agrimgrover/Documents/docker/octopus/import:/import
+
+
+
+#teamcity_agent: /home/agrimgrover/docker/teamcity/agents

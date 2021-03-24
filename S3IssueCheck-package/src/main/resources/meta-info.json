@@ -1,0 +1,9 @@
+{
+    "AUTHOR": "Agrim",
+    "DESCRIPTION": "S3IssueCheck 1.0.0",
+    "INSTANCE": "ucs-1016ga-wfaw-10037-workfusion-lb1.workfusion.com",
+    "NAME": "S3IssueCheck:1.0.0",
+    "PACKAGE_DATE": "2019-9-20 00:00:00",
+    "TARGET_VERSION": "10.1.0.0",
+    "WF_VERSION": "10.1.0.0"
+}

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.workfusion.odf</groupId>
+        <artifactId>odf</artifactId>
+        <version>10.1.0.4</version>
+    </parent>
+
+    <groupId>com.lpl.issue</groupId>
+    <artifactId>S3IssueCheck</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
+
+    <name>Project for RPA development</name>
+
+    <properties>
+        <workfusion.environment.url>https://ucs-1016ga-wfaw-10037-workfusion-lb1.workfusion.com</workfusion.environment.url>
+
+        <bcb.repository.id>ucs-1016ga-wfaw-10037</bcb.repository.id>
+        <bcb.repository.url>
+            https://ucs-1016ga-wfaw-10037-nexus-lb1.workfusion.com/nexus/content/repositories/wf-machine-config-bundle/
+        </bcb.repository.url>
+
+        <project.build.javaVersion>1.8</project.build.javaVersion>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <odf.bom.version>10.1.0.4</odf.bom.version>
+
+        <maven.deploy.skip>false</maven.deploy.skip>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>wf-dependencies</id>
+            <name>WorkFusion Nexus Repository - dependencies</name>
+            <url>https://repository.workfusion.com/content/groups/dependencies/</url>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>daily</updatePolicy>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>wf-dependencies</id>
+            <url>https://repository.workfusion.com/content/groups/dependencies/</url>
+        </pluginRepository>
+    </pluginRepositories>
+    <modules>
+        <module>S3IssueCheck-bcb</module>
+        <module>S3IssueCheck-package</module>
+    </modules>
+</project>
