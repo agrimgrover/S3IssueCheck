@@ -1,0 +1,13 @@
+version: "3.7"
+
+services:
+  teamcity-server:
+    container_name: teamcity-server-instance
+    image: jetbrains/teamcity-server
+    ports:
+      - 8100:8111
+    depends_on:
+      - mssql
+    volumes:
+      - /home/agrimgrover/docker/teamcity/data:/data/teamcity_server/datadir
+      - /home/agrimgrover/docker/teamcity/logs:/opt/teamcity/logs

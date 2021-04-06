@@ -31,6 +31,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="/docker/deployment/setup/teamcity/agent/docker-compose.yml">
+          <value>
+            <Attribute>
+              <option name="separator" value=":" />
+            </Attribute>
+          </value>
+        </entry>
       </map>
     </option>
   </component>

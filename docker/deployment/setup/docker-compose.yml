@@ -19,22 +19,21 @@ services:
       interval: 10s
       retries: 10
     volumes:
-      - /home/agrimgrover/docker/mysql:/var/opt/mssql
+      - /home/agrimgrover/docker/mssql:/var/opt/mssql
+
+#db encryption key=PoBj9MZunVVVH3V6sZdc264hdJ3M83
 
   nexus:
     container_name: nexus2
     image: sonatype/nexus
     ports:
-      - 8081:8081
-#   volumes:
-#     - /home/agrimgrover/docker/nexus/work:/sonatype-work
-
+      - 8200:8081
 
   teamcity-server:
     container_name: teamcity-server-instance
     image: jetbrains/teamcity-server
     ports:
-      - 8111:8111
+      - 8100:8111
     depends_on:
       - mssql
     volumes:
@@ -49,7 +48,7 @@ services:
     volumes:
       - /home/agrimgrover/docker/teamcity/agent0:/data/teamcity_agent/conf
     environment:
-      SERVER_URL: docker.gcs.net.in:8111
+      SERVER_URL: docker.gcs.net.in:8100
 
   teamcity-agent-1:
     container_name: teamcity-agent-instance-1
@@ -58,7 +57,7 @@ services:
     volumes:
       - /home/agrimgrover/docker/teamcity/agent1:/data/teamcity_agent/conf
     environment:
-      SERVER_URL: docker.gcs.net.in:8111
+      SERVER_URL: docker.gcs.net.in:8100
 
   teamcity-agent-2:
     container_name: teamcity-agent-instance-2
@@ -67,34 +66,34 @@ services:
     volumes:
       - /home/agrimgrover/docker/teamcity/agent2:/data/teamcity_agent/conf
     environment:
-      SERVER_URL: docker.gcs.net.in:8111
+      SERVER_URL: docker.gcs.net.in:8100
 
   octopus-server:
     container_name: octopus_server
     image: octopusdeploy/octopusdeploy:latest
-    privileged: false
-    user: root
+    privileged: "true"
+    depends_on: [teamcity-agent-2]
     environment:
-      ACCEPT_EULA: Y
-      OCTOPUS_SERVER_NODE_NAME:
-      DB_CONNECTION_STRING: Server=docker.gcs.net.in,1433;Database=OctopusDeploy;User=sa;Password=jEn125us!
-      ADMIN_USERNAME: admin
-      ADMIN_PASSWORD: admin123
-      ADMIN_EMAIL: admin@admin.com
-      OCTOPUS_SERVER_BASE64_LICENSE: 46953-91015-06427-08255
-      MASTER_KEY:
-      ADMIN_API_KEY:
-      DISABLE_DIND: Y
+      ACCEPT_EULA: "Y"
+      OCTOPUS_SERVER_NODE_NAME: "octopus_server_local"
+      DB_CONNECTION_STRING: "Server=docker.gcs.net.in,1433;Database=OctopusDeploy;User=sa;Password=jEn125us!"
+      ADMIN_USERNAME: "admin"
+      ADMIN_PASSWORD: "Passw0rd123"
+      ADMIN_EMAIL: "agrimgrover@hotmail.com"
+      OCTOPUS_SERVER_BASE64_LICENSE:
+      MASTER_KEY: "X65rHSPYEc4N7mtn/XIrmA=="
     ports:
-      - 8080:8080
+      - 8000:8080
       - 10943:10943
     volumes:
-      - /Users/agrimgrover/Documents/docker/octopus/repository:/repository
-      - /Users/agrimgrover/Documents/docker/octopus/artifacts:/artifacts
-      - /Users/agrimgrover/Documents/docker/octopus/taskLogs:/taskLogs
-      - /Users/agrimgrover/Documents/docker/octopus/cache:/cache
-      - /Users/agrimgrover/Documents/docker/octopus/import:/import
+      - /home/agrimgrover/docker/octopus/repository:/repository
+      - /home/agrimgrover/docker/octopus/artifacts:/artifacts
+      - /home/agrimgrover/docker/octopus/taskLogs:/taskLogs
+      - /home/agrimgrover/docker/octopus/cache:/cache
+      - /home/agrimgrover/docker/octopus/import:/import
 
+# Create a new master key with the command: openssl rand 16 | base64
+#Base64 version of Masterkey = X65rHSPYEc4N7mtn/XIrmA==
 
 
 

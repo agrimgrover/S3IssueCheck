@@ -1,0 +1,8 @@
+version: "3.7"
+
+services:
+  teamcity-agent-0:
+    scale: 3
+    image: jetbrains/teamcity-agent
+    environment:
+      SERVER_URL: docker.gcs.net.in:8100
